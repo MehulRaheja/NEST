@@ -1,0 +1,42 @@
+### Create a new User
+POST http://localhost:3001/auth/signup
+content-type: application/json
+
+{
+  "email": "user24@example.com",
+  "password": "password"
+}
+
+### Signin as an existing User
+POST http://localhost:3001/auth/signin
+content-type: application/json
+
+{
+  "email": "user23@example.com",
+  "password": "password"
+}
+
+### Signout the existing User
+POST http://localhost:3001/auth/signout
+content-type: application/json
+
+### get currently signed in user
+Get http://localhost:3001/auth/whoami
+
+### find user by id
+Get http://localhost:3001/auth/3
+
+### find all users with a given email
+Get http://localhost:3001/auth?email=user@exampleeeee.com 
+
+### delete a user with a given id
+Delete http://localhost:3001/auth/499
+
+### update user with a given id
+Patch http://localhost:3001/auth/1980
+content-type: application/json
+
+{
+  "email": "user@gmail.com",
+  "password": "password4"
+}
