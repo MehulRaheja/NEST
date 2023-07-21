@@ -14,6 +14,6 @@ async function bootstrap() {
   //     whitelist: true, // true means it will remove all the additional fields which we are not expecting. Hence make our body more secure.
   //   })
   // );
-  await app.listen(3001);
+  await app.listen(process.env.PORT || 3001);
 }
 bootstrap();

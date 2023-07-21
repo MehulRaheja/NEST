@@ -8,6 +8,7 @@ import { User } from './users/users.entity';
 import { Report } from './reports/reports.entity';
 import { APP_PIPE } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+const dbConfig = require('../ormconfig');
 const cookieSession = require('cookie-session');
 
 @Module({
@@ -18,17 +19,19 @@ const cookieSession = require('cookie-session');
       isGlobal: true, 
       envFilePath: `.env.${process.env.NODE_ENV}`
     }),
-    TypeOrmModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => {
-        return {
-          type: 'sqlite',
-          database: config.get<string>('DB_NAME'),
-          entities: [User, Report],
-          synchronize: true,
-        }
-      }
-    }),
+    TypeOrmModule.forRoot(dbConfig),
+    // REMOVING THIS BECAUSE DB CONFIG IS SET IN ORMCONFIG.JS FILE
+    // TypeOrmModule.forRootAsync({
+    //   inject: [ConfigService],
+    //   useFactory: (config: ConfigService) => {
+    //     return {
+    //       type: 'sqlite',
+    //       database: config.get<string>('DB_NAME'),
+    //       entities: [User, Report],
+    //       synchronize: false,  // changed it to false during setting production environment
+    //     }
+    //   }
+    // }),
     // TypeOrmModule.forRoot({
     //   type: 'sqlite',
     //   // One way of selecting db dynamically
@@ -54,11 +57,12 @@ const cookieSession = require('cookie-session');
   ],
 })
 export class AppModule {
+  constructor(private configService: ConfigService) {}
   /// APPLYING COOKIE SESSION AS A GLOBAL MIDDLEWARE
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply( cookieSession({
-        keys: ['sfasfasdfasfas']
+        keys: [this.configService.get('COOKIE_KEY')]
       }),
     )
     .forRoutes('*'); // This means use this global middleware for all the routes

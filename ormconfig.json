@@ -1,0 +1,10 @@
+{
+  "synchronize": false,
+  "migrations": ["migrations/*.js"],
+  "cli": {
+    "migrationsDir": "migrations"
+  },
+  "type": "sqlite",
+  "database": "./db.sqlite",
+  "entities": ["**/*.entity.js"]
+}
